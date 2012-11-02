@@ -1,0 +1,403 @@
+Passed: World pointer initialised.
+Passed: Step: (60,0,0)
+Passed: Step: (-60,0,0)
+Passed: Step: (0,60,0)
+Passed: Step: (0,-60,0)
+Passed: Step: (0,0,60)
+Passed: Step: (0,0,-60)
+Passed: Step to border: (60,-60,-60)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,60)
+Passed: Step to border: (60,-60,60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,60,-60)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (60,60,-60)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (-60,-60,-60)
+Passed: Step to border: (-60,-60,0)
+Passed: Step to border: (-60,-60,0)
+Passed: Step to border: (-60,-60,0)
+Passed: Step to border: (-60,-60,0)
+Passed: Step to border: (-60,-60,60)
+Passed: Step to border: (-60,-60,60)
+Passed: Step to border: (-60,0,-60)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,0,-60)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,0,-60)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,0,-60)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,0)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,60,-60)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,60)
+Passed: Step to border: (-60,60,60)
+Passed: Step to border: (-60,60,-60)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,60)
+Passed: Step to border: (-60,60,60)
+Passed: Step to border: (-60,60,-60)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,0)
+Passed: Step to border: (-60,60,60)
+Passed: Step to border: (-60,60,60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (60,60,-60)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (60,60,-60)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (-60,-60,-60)
+Passed: Step to border: (-60,-60,0)
+Passed: Step to border: (-60,-60,0)
+Passed: Step to border: (-60,-60,0)
+Passed: Step to border: (-60,-60,0)
+Passed: Step to border: (-60,-60,60)
+Passed: Step to border: (-60,-60,60)
+Passed: Step to border: (0,-60,-60)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,-60,-60)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,-60,-60)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,-60,-60)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,0)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (60,-60,-60)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,60)
+Passed: Step to border: (60,-60,60)
+Passed: Step to border: (60,-60,-60)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,0)
+Passed: Step to border: (60,-60,60)
+Passed: Step to border: (60,-60,60)
+Passed: Step to border: (-60,-60,60)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,0,60)
+Passed: Step to border: (-60,60,60)
+Passed: Step to border: (-60,60,60)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,-60,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (60,-60,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (60,-60,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (60,60,60)
+Passed: Step to border: (-60,-60,-60)
+Passed: Step to border: (-60,0,-60)
+Passed: Step to border: (-60,0,-60)
+Passed: Step to border: (-60,0,-60)
+Passed: Step to border: (-60,0,-60)
+Passed: Step to border: (-60,60,-60)
+Passed: Step to border: (-60,60,-60)
+Passed: Step to border: (0,-60,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,-60,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,-60,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,-60,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,0,-60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (0,60,-60)
+Passed: Step to border: (60,-60,-60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,60,-60)
+Passed: Step to border: (60,60,-60)
+Passed: Step to border: (60,-60,-60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,0,-60)
+Passed: Step to border: (60,60,-60)
+Passed: Step to border: (60,60,-60)
+Passed: Step to border: (0,0,0)
+Passed: Step to border: (60,0,0)
+Passed: Step to border: (0,60,0)
+Passed: Step to border: (60,60,0)
+Passed: Step to border: (60,0,60)
+Passed: Step to border: (0,0,60)
+Passed: Step to border: (0,60,60)
+Passed: Step to border: (60,60,60)
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 1
+Passed: Check for correct target position of border handling 1
+Passed: Check for correct step of border handling 1
+Passed: Check for correct arrival time of border message 1
+Passed: Check for correct start position of border move 1
+Passed: Check for correct direction of border move 1
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 2
+Passed: Check for correct target position of border handling 2
+Passed: Check for correct step of border handling 2
+Passed: Check for correct arrival time of border message 2
+Passed: Check for correct start position of border move 2
+Passed: Check for correct direction of border move 2
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 3
+Passed: Check for correct target position of border handling 3
+Passed: Check for correct step of border handling 3
+Passed: Check for correct arrival time of border message 3
+Passed: Check for correct start position of border move 3
+Passed: Check for correct direction of border move 3
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 4
+Passed: Check for correct target position of border handling 4
+Passed: Check for correct step of border handling 4
+Passed: Check for correct arrival time of border message 4
+Passed: Check for correct start position of border move 4
+Passed: Check for correct direction of border move 4
+Passed: In our test every handleIfOutside should find a collission.
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 5
+Passed: Check for correct target position of border handling 5
+Passed: Check for correct step of border handling 5
+Passed: Check for correct arrival time of border message 5
+Passed: Check for correct start position of border move 5
+Passed: Check for correct direction of border move 5
+Passed: In our test every handleIfOutside should find a collission.
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 6
+Passed: Check for correct target position of border handling 6
+Passed: Check for correct step of border handling 6
+Passed: Check for correct arrival time of border message 6
+Passed: Check for correct start position of border move 6
+Passed: Check for correct direction of border move 6
+Passed: In our test every handleIfOutside should find a collission.
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 7
+Passed: Check for correct target position of border handling 7
+Passed: Check for correct step of border handling 7
+Passed: Check for correct arrival time of border message 7
+Passed: Check for correct start position of border move 7
+Passed: Check for correct direction of border move 7
+Passed: In our test every handleIfOutside should find a collission.
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 8
+Passed: Check for correct target position of border handling 8
+Passed: Check for correct step of border handling 8
+Passed: Check for correct arrival time of border message 8
+Passed: Check for correct start position of border move 8
+Passed: Check for correct direction of border move 8
+Passed: In our test every handleIfOutside should find a collission.
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 9
+Passed: Check for correct target position of border handling 9
+Passed: Check for correct step of border handling 9
+Passed: Check for correct arrival time of border message 9
+Passed: Check for correct start position of border move 9
+Passed: Check for correct direction of border move 9
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 10
+Passed: Check for correct target position of border handling 10
+Passed: Check for correct step of border handling 10
+Passed: Check for correct arrival time of border message 10
+Passed: Check for correct start position of border move 10
+Passed: Check for correct direction of border move 10
+Passed: In our test every handleIfOutside should find a collission.
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 11
+Passed: Check for correct target position of border handling 11
+Passed: Check for correct step of border handling 11
+Passed: Check for correct arrival time of border message 11
+Passed: Check for correct start position of border move 11
+Passed: Check for correct direction of border move 11
+Passed: In our test every handleIfOutside should find a collission.
+Passed: In our test every handleIfOutside should find a collission.
+Passed: In our test every handleIfOutside should find a collission.
+Passed: Check for correct step target of border handling 12
+Passed: Check for correct target position of border handling 12
+Passed: Check for correct step of border handling 12
+Passed: Check for correct arrival time of border message 12
+Passed: Check for correct start position of border move 12
+Passed: Check for correct direction of border move 12
+Passed: Check if all tests passed.
+Passed: Checking if all mobility tests passed.
