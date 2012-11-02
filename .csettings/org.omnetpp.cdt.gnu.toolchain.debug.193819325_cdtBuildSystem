@@ -28,7 +28,7 @@
 				</toolChain>
 			</folderInfo>
 			<sourceEntries>
-				<entry excluding="templates|out|images|doc" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+				<entry excluding="out|images|doc|templates" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 			</sourceEntries>
 		</configuration>
 	</storageModule>
