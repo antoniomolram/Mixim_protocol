@@ -70,7 +70,8 @@ void NetworkStackTrafficGenAnchor::handleSelfMsg(cMessage *msg)
 //	case PHASE_1:
 	case SEND_BROADCAST_TIMER:
 		assert(msg == delayTimer);
-		sendUnicast();
+		sendBroadcast();
+		//sendUnicast();
 		remainingBurst--;
 		if(remainingBurst == 0) {
 			remainingBurst = burstSize;
@@ -137,12 +138,10 @@ void NetworkStackTrafficGenAnchor::sendUnicast()
     pkt->setSrcAddr(myNetwAddr);
     pkt->setDestAddr(destination);
     NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
- //   EV << "Dirección de destino ancla:" <<    getParentModule()->getParentModule()->getSubmodule("anchor",-1)->findSubmodule("nic") << endl;
     EV << "Destination:" <<    direccion  << endl;
 
     Packet p(packetLength, 0, 1);
     emit(BaseMacLayer::catPacketSignal, &p);
-
     sendDown(pkt);
 }
 

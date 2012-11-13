@@ -19,7 +19,7 @@ import org.mixim.modules.node.WirelessNodeBatteryNetwl;
 module PhyMacAnchor extends WirelessNodeBatteryNetwl
 {
     parameters:
-        networkType = "org.mixim.examples.ieee802154Narrow.NetworkStackTrafficGen";
+        networkType = "org.mixim.examples.ieee802154Narrow.NetworkStackTrafficGenAnchor";
         nicType = "Nic802154_TI_CC2420";
         int numHosts; // total number of hosts in the network
     connections allowunconnected:

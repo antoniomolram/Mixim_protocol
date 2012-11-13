@@ -68,7 +68,7 @@ void NetworkStackTrafficGen::handleSelfMsg(cMessage *msg)
 	{
 	case SEND_BROADCAST_TIMER:
 		assert(msg == delayTimer);
-		sendBroadcast();
+		//sendBroadcast();
 		remainingBurst--;
 		if(remainingBurst == 0) {
 			remainingBurst = burstSize;
@@ -112,7 +112,6 @@ void NetworkStackTrafficGen::sendBroadcast()
 
 	pkt->setSrcAddr(myNetwAddr);
 	pkt->setDestAddr(destination);
-
 	NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
 
 	Packet p(packetLength, 0, 1);
