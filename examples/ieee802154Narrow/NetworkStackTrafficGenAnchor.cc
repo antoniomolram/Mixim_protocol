@@ -18,6 +18,7 @@
 #include <cassert>
 
 #include "Packet.h"
+#include "request_ranging_m.h"
 #include "BaseMacLayer.h"
 #include "FindModule.h"
 #include "NetwToMacControlInfo.h"
@@ -67,11 +68,10 @@ void NetworkStackTrafficGenAnchor::handleSelfMsg(cMessage *msg)
 
 	switch( msg->getKind() )
 	{
-//	case PHASE_1:
 	case SEND_BROADCAST_TIMER:
 		assert(msg == delayTimer);
-		sendBroadcast();
-		//sendUnicast();
+		//sendBroadcast();
+		sendUnicast();
 		remainingBurst--;
 		if(remainingBurst == 0) {
 			remainingBurst = burstSize;
@@ -80,7 +80,7 @@ void NetworkStackTrafficGenAnchor::handleSelfMsg(cMessage *msg)
 			scheduleAt(simTime() + packetTime * 2, msg);
 		}
 		break;
-//	case PHASE_2:
+
 
 
 	default:
@@ -128,20 +128,29 @@ void NetworkStackTrafficGenAnchor::sendBroadcast()
 
 	Packet p(packetLength, 0, 1);
 	emit(BaseMacLayer::catPacketSignal, &p);
-
+    short kind=0; // Start request
+    pkt->setKind(kind);
+    pkt->addPar("parameter");
 	sendDown(pkt);
+
+
 }
 void NetworkStackTrafficGenAnchor::sendUnicast()
 {
-    NetwPkt *pkt = new NetwPkt("BROADCAST_ANCHOR", UNICAST_MESSAGE);
+    Request_ranging *pkt = new Request_ranging("BROADCAST_ANCHOR", UNICAST_MESSAGE);
     pkt->setBitLength(packetLength);
     pkt->setSrcAddr(myNetwAddr);
     pkt->setDestAddr(destination);
-    NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
-    EV << "Destination:" <<    direccion  << endl;
+    pkt->setRanging_demand(true);
+    pkt->setNombre_cualquiera("HOLA");
+    short kind=0; // Start request
+    pkt->setKind(kind);
 
-    Packet p(packetLength, 0, 1);
-    emit(BaseMacLayer::catPacketSignal, &p);
+    NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
+    //NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
+    EV << "Destination:" <<    direccion  << endl;
+    //Packet p(packetLength, 0, 1);
+   // emit(BaseMacLayer::catPacketSignal, &p);
     sendDown(pkt);
 }
 

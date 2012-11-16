@@ -21,6 +21,7 @@
 #include "BaseMacLayer.h"
 #include "FindModule.h"
 #include "NetwToMacControlInfo.h"
+#include "request_ranging_m.h"
 
 Define_Module(NetworkStackTrafficGen);
 
@@ -68,16 +69,15 @@ void NetworkStackTrafficGen::handleSelfMsg(cMessage *msg)
 	{
 	case SEND_BROADCAST_TIMER:
 		assert(msg == delayTimer);
-		//sendBroadcast();
 		remainingBurst--;
 		if(remainingBurst == 0) {
-			remainingBurst = burstSize;
+            remainingBurst = burstSize;
 			scheduleAt(simTime() + (dblrand()*1.4+0.3)*packetTime * burstSize / pppt, msg);
 		} else {
 			scheduleAt(simTime() + packetTime * 2, msg);
 		}
-
 		break;
+
 	default:
 		EV << "Unkown selfmessage! -> delete, kind: "<<msg->getKind() <<endl;
 		delete msg;
@@ -88,6 +88,18 @@ void NetworkStackTrafficGen::handleSelfMsg(cMessage *msg)
 
 void NetworkStackTrafficGen::handleLowerMsg(cMessage *msg)
 {
+    Request_ranging *pkt = new Request_ranging(msg->getName());
+    EV << "El paqutete dice que " << pkt->getNombre_cualquiera() << endl;
+    switch( msg->getKind() )
+        {
+    case START_REQUEST: // Anchor pregunta si queremos hacer Ranging.
+        EV << "Solicitud de ranging" << endl;
+        break;
+    default:
+        EV << "Unkown received message! -> delete, kind: "<<msg->getKind() <<endl;
+        delete msg;
+        break;
+        }
 	Packet p(packetLength, 1, 0);
 	emit(BaseMacLayer::catPacketSignal, &p);
 

@@ -35,6 +35,7 @@
 #include "BaseConnectionManager.h"
 #include "FindModule.h"
 #include "MacPkt_m.h"
+#include "request_ranging_m.h"
 
 Define_Module(csma);
 
@@ -180,11 +181,21 @@ csma::~csma() {
 void csma::handleUpperMsg(cMessage *msg) {
 	//MacPkt *macPkt = encapsMsg(msg);
 	MacPkt *macPkt = new MacPkt(msg->getName());
+
+//Funcionamiento del pasar paquetes y leerlos! :D
+//Añadido paquete Request_ranging
+	    Request_ranging *paquete = (Request_ranging *)msg;
+	    EV <<"Paquete nombre:"<< paquete->getNombre_cualquiera() << endl;
+
+
+
+
+
 	macPkt->setBitLength(headerLength);
 	cObject *const cInfo = msg->removeControlInfo();
 	debugEV<<"CSMA received a message from upper layer, name is " << msg->getName() <<", CInfo removed, mac addr="<< getUpperDestinationFromControlInfo(cInfo) << endl;
 	LAddress::L2Type dest = getUpperDestinationFromControlInfo(cInfo);
-	macPkt->setDestAddr(dest);
+	macPkt->setDestAddr(18);
 	delete cInfo;
 	macPkt->setSrcAddr(myMacAddr);
 
@@ -205,6 +216,7 @@ void csma::handleUpperMsg(cMessage *msg) {
 	//RadioAccNoise3PhyControlInfo *pco = new RadioAccNoise3PhyControlInfo(bitrate);
 	//macPkt->setControlInfo(pco);
 	assert(static_cast<cPacket*>(msg));
+
 	macPkt->encapsulate(static_cast<cPacket*>(msg));
 	debugEV <<"pkt encapsulated, length: " << macPkt->getBitLength() << "\n";
 	executeMac(EV_SEND_REQUEST, macPkt);
