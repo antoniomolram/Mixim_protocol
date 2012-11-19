@@ -41,8 +41,7 @@ private:
 
 public:
 	enum TrafficGenMessageKinds{
-		SEND_BROADCAST_TIMER = 1,
-		BROADCAST_MESSAGE, UNICAST_MESSAGE
+        SEND_BROADCAST_TIMER = 1, RANGE_REQUEST=2,RANGE_ACCEPT=3
 	};
 
 protected:

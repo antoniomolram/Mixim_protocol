@@ -181,11 +181,15 @@ csma::~csma() {
 void csma::handleUpperMsg(cMessage *msg) {
 	//MacPkt *macPkt = encapsMsg(msg);
 	MacPkt *macPkt = new MacPkt(msg->getName());
+	Request_ranging *paquete = (Request_ranging *)msg;
+/*
+ * Funcionamiento del pasar paquetes y leerlos! :D
+ * Añadido paquete Request_ranging
+ *
+ * Request_ranging *paquete = (Request_ranging *)msg;
+ * EV <<"Paquete nombre:"<< paquete->getNombre_cualquiera() << endl;
+ */
 
-//Funcionamiento del pasar paquetes y leerlos! :D
-//Añadido paquete Request_ranging
-	    Request_ranging *paquete = (Request_ranging *)msg;
-	    EV <<"Paquete nombre:"<< paquete->getNombre_cualquiera() << endl;
 
 
 
@@ -195,7 +199,7 @@ void csma::handleUpperMsg(cMessage *msg) {
 	cObject *const cInfo = msg->removeControlInfo();
 	debugEV<<"CSMA received a message from upper layer, name is " << msg->getName() <<", CInfo removed, mac addr="<< getUpperDestinationFromControlInfo(cInfo) << endl;
 	LAddress::L2Type dest = getUpperDestinationFromControlInfo(cInfo);
-	macPkt->setDestAddr(18);
+	macPkt->setDestAddr(paquete->getDestAddr());
 	delete cInfo;
 	macPkt->setSrcAddr(myMacAddr);
 

@@ -23,6 +23,7 @@
 #include "NetwToMacControlInfo.h"
 #include "request_ranging_m.h"
 
+
 Define_Module(NetworkStackTrafficGen);
 
 void NetworkStackTrafficGen::initialize(int stage)
@@ -88,12 +89,23 @@ void NetworkStackTrafficGen::handleSelfMsg(cMessage *msg)
 
 void NetworkStackTrafficGen::handleLowerMsg(cMessage *msg)
 {
-    Request_ranging *pkt = new Request_ranging(msg->getName());
-    EV << "El paqutete dice que " << pkt->getNombre_cualquiera() << endl;
-    switch( msg->getKind() )
+    Request_ranging *pkt = (Request_ranging *)msg;
+    short kind = pkt->getKind();
+    switch( kind )
         {
-    case START_REQUEST: // Anchor pregunta si queremos hacer Ranging.
+    case RANGE_REQUEST: // Anchor pregunta si queremos hacer Ranging.
         EV << "Solicitud de ranging" << endl;
+        if(pkt->getRanging_demand())
+        {
+            //Comprobar más datos de paquete
+            //Enviar Range Accept
+            EV << "Dirección del Anchor:" <<  pkt->getSrcAddr() <<  endl;
+            int anchor_addr = pkt->getSrcAddr();
+
+            // Added -1 because anchor_addr is +1 and I don't know why! xD
+            sendRangeAccept(anchor_addr-1);
+
+        }
         break;
     default:
         EV << "Unkown received message! -> delete, kind: "<<msg->getKind() <<endl;
@@ -117,18 +129,28 @@ void NetworkStackTrafficGen::handleLowerControl(cMessage *msg)
 	msg = 0;
 }
 
-void NetworkStackTrafficGen::sendBroadcast()
+//void NetworkStackTrafficGen::sendBroadcast()
+//{
+//	NetwPkt *pkt = new NetwPkt("BROADCAST_MESSAGE", BROADCAST_MESSAGE);
+//	pkt->setBitLength(packetLength);
+//
+//	pkt->setSrcAddr(myNetwAddr);
+//	pkt->setDestAddr(destination);
+//	NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
+//
+//	Packet p(packetLength, 0, 1);
+//	emit(BaseMacLayer::catPacketSignal, &p);
+//
+//	sendDown(pkt);
+//}
+void NetworkStackTrafficGen::sendRangeAccept(int anchor_dir)
 {
-	NetwPkt *pkt = new NetwPkt("BROADCAST_MESSAGE", BROADCAST_MESSAGE);
-	pkt->setBitLength(packetLength);
-
-	pkt->setSrcAddr(myNetwAddr);
-	pkt->setDestAddr(destination);
-	NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
-
-	Packet p(packetLength, 0, 1);
-	emit(BaseMacLayer::catPacketSignal, &p);
-
-	sendDown(pkt);
+       Request_ranging *pkt = new Request_ranging("RANGE ACCEPT",RANGE_ACCEPT );
+       pkt->setBitLength(packetLength);
+       pkt->setSrcAddr(myNetwAddr);
+       pkt->setDestAddr(anchor_dir);
+       pkt->setRanging_demand(true);
+       NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
+        EV << "Enviando confirmación de Range Accepted al anchor ->"<< anchor_dir <<endl;
+        sendDown(pkt);
 }
-

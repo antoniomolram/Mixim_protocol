@@ -93,13 +93,21 @@ void NetworkStackTrafficGenAnchor::handleSelfMsg(cMessage *msg)
 
 void NetworkStackTrafficGenAnchor::handleLowerMsg(cMessage *msg)
 {
+    Request_ranging *pkt = (Request_ranging *)msg;
 	Packet p(packetLength, 1, 0);
 	emit(BaseMacLayer::catPacketSignal, &p);
 	msg->getKind();
     switch( msg->getKind() )
         {
-        case UNICAST_MESSAGE:
-            EV << "Mensaje unicast recibido en el ancla de un nodo" << endl;
+        case RANGE_ACCEPT:
+            if(pkt->getRanging_demand()){
+                EV << "Perfect, aceptamos el ranging! :D" << endl;
+            }
+            else
+            {
+                EV << "Lo sentimos, el nodo no acepta el ranging! :(" << endl;
+            }
+
             delete msg;
             msg = 0;
         break;
@@ -118,7 +126,7 @@ void NetworkStackTrafficGenAnchor::handleLowerControl(cMessage *msg)
 
 void NetworkStackTrafficGenAnchor::sendBroadcast()
 {
-	NetwPkt *pkt = new NetwPkt("BROADCAST_ANCHOR", BROADCAST_MESSAGE);
+	NetwPkt *pkt = new NetwPkt("BROADCAST_ANCHOR", RANGE_REQUEST);
 	pkt->setBitLength(packetLength);
 
 	pkt->setSrcAddr(myNetwAddr);
@@ -137,13 +145,12 @@ void NetworkStackTrafficGenAnchor::sendBroadcast()
 }
 void NetworkStackTrafficGenAnchor::sendUnicast()
 {
-    Request_ranging *pkt = new Request_ranging("BROADCAST_ANCHOR", UNICAST_MESSAGE);
+    Request_ranging *pkt = new Request_ranging("RANGE REQUEST");
     pkt->setBitLength(packetLength);
     pkt->setSrcAddr(myNetwAddr);
-    pkt->setDestAddr(destination);
+    pkt->setDestAddr(18);
     pkt->setRanging_demand(true);
-    pkt->setNombre_cualquiera("HOLA");
-    short kind=0; // Start request
+    short kind=2; // Start request
     pkt->setKind(kind);
 
     NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);

@@ -23,6 +23,8 @@
 #include "BaseLayer.h"
 #include "BaseArp.h"
 #include "BaseWorldUtility.h"
+#include "request_ranging_m.h"
+#include "NetwToMacControlInfo.h"
 
 /**
  * @brief A module to generate traffic for the NIC, used for testing purposes.
@@ -41,8 +43,8 @@ private:
 
 public:
 	enum TrafficGenMessageKinds{
-		SEND_BROADCAST_TIMER = 1, START_REQUEST=0,
-		BROADCAST_MESSAGE
+		SEND_BROADCAST_TIMER = 1, RANGE_REQUEST=2,RANGE_ACCEPT=3
+
 	};
 
 protected:
@@ -111,7 +113,10 @@ protected:
 	}
 
 	/** @brief Send a broadcast message to lower layer. */
-	virtual void sendBroadcast();
+//	virtual void sendBroadcast();
+
+	/** @brief Send a Range Accept message to lower layer */
+	virtual void sendRangeAccept(int anchor_dir);
 };
 
 #endif
