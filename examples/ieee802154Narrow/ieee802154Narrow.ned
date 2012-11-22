@@ -4,7 +4,7 @@ import org.mixim.base.modules.BaseNetwork;
 import org.mixim.modules.news_sources.PhyMacAnchor;
 import org.mixim.base.connectionManager.IConnectionManager;
 import org.mixim.base.modules.IWorldUtility;
-network ieee802154Narrow 
+network ieee802154Narrow
 {
     parameters:
         int numHosts; // total number of hosts in the network
@@ -21,15 +21,15 @@ network ieee802154Narrow
         node[numHosts]: PhyMacHost {
             parameters:
                 numHosts = numHosts;
-                @display("p=233,80;b=42,42,rect,red;i=device/pocketpc");
+                @display("p=86,89;b=42,42,rect,red;i=device/pocketpc");
 
         }
         anchor[numAnchors]: PhyMacAnchor {
             parameters:
                 numHosts = numAnchors;
-                @display("p=90,139;b=42,42,rect,green;i=device/accesspoint");
+                @display("p=248,160;b=42,42,rect,green;i=device/accesspoint");
         }
-        
+
         connectionManager: <cmType> like IConnectionManager {
             parameters:
                 @display("p=201,0;i=abstract/multicast;is=s");

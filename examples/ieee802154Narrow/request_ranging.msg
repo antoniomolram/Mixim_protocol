@@ -19,7 +19,6 @@
 //
 packet Request_ranging {
     bool ranging_demand;
-    string nombre_cualquiera;
     int srcAddr;
     int destAddr;
     

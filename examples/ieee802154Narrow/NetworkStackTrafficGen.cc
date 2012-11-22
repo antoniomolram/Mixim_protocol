@@ -38,6 +38,7 @@ void NetworkStackTrafficGen::initialize(int stage)
 		myNetwAddr   = arp->myNetwAddr(this);
 
 		packetLength = par("packetLength");
+		ackLength    = 256;
 		packetTime   = par("packetTime");
 		pppt         = par("packetsPerPacketTime");
 		burstSize    = par("burstSize");
@@ -107,6 +108,9 @@ void NetworkStackTrafficGen::handleLowerMsg(cMessage *msg)
 
         }
         break;
+    case 3:
+        EV << "Ack del anchor recibido"<< endl;
+        break;
     default:
         EV << "Unkown received message! -> delete, kind: "<<msg->getKind() <<endl;
         delete msg;
@@ -145,12 +149,13 @@ void NetworkStackTrafficGen::handleLowerControl(cMessage *msg)
 //}
 void NetworkStackTrafficGen::sendRangeAccept(int anchor_dir)
 {
-       Request_ranging *pkt = new Request_ranging("RANGE ACCEPT",RANGE_ACCEPT );
-       pkt->setBitLength(packetLength);
+       Request_ranging *pkt = new Request_ranging("RANGE ACCEPT ANCHOR ACK",RANGE_ACCEPT );
+
+       pkt->setBitLength(ackLength);
        pkt->setSrcAddr(myNetwAddr);
        pkt->setDestAddr(anchor_dir);
        pkt->setRanging_demand(true);
        NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
-        EV << "Enviando confirmación de Range Accepted al anchor ->"<< anchor_dir <<endl;
-        sendDown(pkt);
+       EV << "Enviando confirmación de Range Accepted al anchor ->"<< anchor_dir <<endl;
+       sendDown(pkt);
 }

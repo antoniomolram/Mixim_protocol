@@ -41,8 +41,12 @@ private:
 
 public:
 	enum TrafficGenMessageKinds{
-        SEND_BROADCAST_TIMER = 1, RANGE_REQUEST=2,RANGE_ACCEPT=3
+        INIT_RANGING = 1,TIMER_INIT_RANGING, RANGE_REQUEST=2,RANGE_ACCEPT=3
 	};
+	bool ack_pkt;
+    int AckLength;
+
+	simtime_t waiting_ack;
 
 protected:
 
@@ -110,10 +114,10 @@ protected:
 		delete msg;
 	}
 
-	/** @brief Send a broadcast message to lower layer. */
-	virtual void sendBroadcast();
 
 	virtual void sendUnicast();
+
+	virtual void sendAckNode(int addr);
 };
 
 #endif

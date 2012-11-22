@@ -30,8 +30,11 @@ void NetworkStackTrafficGenAnchor::initialize(int stage)
 	BaseLayer::initialize(stage);
 
 	if(stage == 0) {
+	    ack_pkt = true;
+        AckLength    = 256;
+
 		world        = FindModule<BaseWorldUtility*>::findGlobalModule();
-		delayTimer   = new cMessage("delay-timer", SEND_BROADCAST_TIMER);
+		delayTimer   = new cMessage("delay-timer", INIT_RANGING);
 
 		arp          = FindModule<BaseArp*>::findSubModule(findHost());
 		myNetwAddr   = arp->myNetwAddr(this);
@@ -68,20 +71,34 @@ void NetworkStackTrafficGenAnchor::handleSelfMsg(cMessage *msg)
 
 	switch( msg->getKind() )
 	{
-	case SEND_BROADCAST_TIMER:
-		assert(msg == delayTimer);
-		//sendBroadcast();
-		sendUnicast();
-		remainingBurst--;
-		if(remainingBurst == 0) {
-			remainingBurst = burstSize;
-			scheduleAt(simTime() + (dblrand()*1.4+0.3)*packetTime * burstSize / pppt, msg);
-		} else {
-			scheduleAt(simTime() + packetTime * 2, msg);
-		}
+	case INIT_RANGING:
+        assert(msg == delayTimer);
+        sendUnicast();
+        waiting_ack = 100e-3  ;
+        delayTimer   = new cMessage("delay-timer", TIMER_INIT_RANGING);
+        scheduleAt(simTime()+waiting_ack, delayTimer);
+        break;
+
+	case TIMER_INIT_RANGING:
+	    if(ack_pkt==false)
+	    {
+            EV << "Ack entregado no hace falta reenviar" << endl;
+            ack_pkt=false;
+	    }else if (ack_pkt==true)
+	    {
+            EV << "Necesitamos retransmitir el Range request" << endl;
+	        sendUnicast();
+	    }
+
+
+//		remainingBurst--;
+//		if(remainingBurst == 0) {
+//			remainingBurst = burstSize;
+//			scheduleAt(simTime() + (dblrand()*1.4+0.3)*packetTime * burstSize / pppt, msg);
+//		} else {
+//			scheduleAt(simTime() + packetTime * 2, msg);
+//		}
 		break;
-
-
 
 	default:
 		EV << "Unkown selfmessage! -> delete, kind: "<<msg->getKind() <<endl;
@@ -102,15 +119,22 @@ void NetworkStackTrafficGenAnchor::handleLowerMsg(cMessage *msg)
         case RANGE_ACCEPT:
             if(pkt->getRanging_demand()){
                 EV << "Perfect, aceptamos el ranging! :D" << endl;
+
+                ack_pkt=false;
+                //Confirmamos al ancla que hacemos ranging.
+                sendAckNode(pkt->getSrcAddr());
             }
             else
             {
                 EV << "Lo sentimos, el nodo no acepta el ranging! :(" << endl;
+
             }
 
             delete msg;
             msg = 0;
         break;
+
+
         }
 }
 
@@ -119,30 +143,12 @@ void NetworkStackTrafficGenAnchor::handleLowerControl(cMessage *msg)
 {
 	if(msg->getKind() == BaseMacLayer::PACKET_DROPPED) {
 		nbPacketDropped++;
+        EV << "Mensaje no ha llegado"  <<endl;
 	}
 	delete msg;
 	msg = 0;
 }
 
-void NetworkStackTrafficGenAnchor::sendBroadcast()
-{
-	NetwPkt *pkt = new NetwPkt("BROADCAST_ANCHOR", RANGE_REQUEST);
-	pkt->setBitLength(packetLength);
-
-	pkt->setSrcAddr(myNetwAddr);
-	pkt->setDestAddr(destination);
-
-	NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
-
-	Packet p(packetLength, 0, 1);
-	emit(BaseMacLayer::catPacketSignal, &p);
-    short kind=0; // Start request
-    pkt->setKind(kind);
-    pkt->addPar("parameter");
-	sendDown(pkt);
-
-
-}
 void NetworkStackTrafficGenAnchor::sendUnicast()
 {
     Request_ranging *pkt = new Request_ranging("RANGE REQUEST");
@@ -154,10 +160,21 @@ void NetworkStackTrafficGenAnchor::sendUnicast()
     pkt->setKind(kind);
 
     NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
-    //NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
-    EV << "Destination:" <<    direccion  << endl;
-    //Packet p(packetLength, 0, 1);
-   // emit(BaseMacLayer::catPacketSignal, &p);
+
     sendDown(pkt);
+}
+
+void NetworkStackTrafficGenAnchor::sendAckNode(int addr)
+{
+    EV<< "Dirección del nodo a contestar ->" << addr << endl;
+    Request_ranging *pkt = new Request_ranging("RANGE ACCEPT NODE ACK");
+       pkt->setBitLength(AckLength);
+       pkt->setSrcAddr(myNetwAddr);
+       pkt->setDestAddr(addr-1);
+       pkt->setRanging_demand(true);
+       short kind=3;
+       pkt->setKind(kind);
+       NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
+       sendDown(pkt);
 }
 

@@ -43,13 +43,14 @@ private:
 
 public:
 	enum TrafficGenMessageKinds{
-		SEND_BROADCAST_TIMER = 1, RANGE_REQUEST=2,RANGE_ACCEPT=3
+		SEND_BROADCAST_TIMER = 1, RANGE_REQUEST=2,RANGE_ACCEPT=3,RANGE_ACCEPT_ACK=4
 
 	};
 
 protected:
 
 	int packetLength;
+	int ackLength;
 	simtime_t packetTime;
 	double pppt;
 	int burstSize;
@@ -62,7 +63,11 @@ protected:
 	BaseArp* arp;
 	LAddress::L3Type myNetwAddr;
 
-	cMessage *delayTimer;
+	cMessage *delayTimerACK;
+    cMessage *delayTimer;
+
+	int waiting_ack;
+
 
 	BaseWorldUtility* world;
 
