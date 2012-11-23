@@ -34,26 +34,22 @@ void NetworkStackTrafficGenAnchor::initialize(int stage)
         AckLength    = 256;
 
 		world        = FindModule<BaseWorldUtility*>::findGlobalModule();
-		delayTimer   = new cMessage("delay-timer", INIT_RANGING);
+		delayTimer   = new cMessage("Init pkt", INIT_RANGING);
 
 		arp          = FindModule<BaseArp*>::findSubModule(findHost());
 		myNetwAddr   = arp->myNetwAddr(this);
-		direccion = 3;
 		packetLength = par("packetLength");
 		packetTime   = par("packetTime");
 		pppt         = par("packetsPerPacketTime");
 		burstSize    = par("burstSize");
-		//destination  = LAddress::L3Type(par("destination").longValue());
 		destination = LAddress::L3Type(direccion);
 		nbPacketDropped = 0;
 	} else if (stage == 1) {
 		if(burstSize > 0) {
-			remainingBurst = burstSize;
-			scheduleAt(dblrand() * packetTime * burstSize / pppt, delayTimer);
+			scheduleAt(simTime(), delayTimer);
 		}
-	} else {
-
 	}
+
 }
 
 NetworkStackTrafficGenAnchor::~NetworkStackTrafficGenAnchor() {
@@ -64,6 +60,7 @@ NetworkStackTrafficGenAnchor::~NetworkStackTrafficGenAnchor() {
 void NetworkStackTrafficGenAnchor::finish()
 {
 	recordScalar("dropped", nbPacketDropped);
+
 }
 
 void NetworkStackTrafficGenAnchor::handleSelfMsg(cMessage *msg)
@@ -73,32 +70,37 @@ void NetworkStackTrafficGenAnchor::handleSelfMsg(cMessage *msg)
 	{
 	case INIT_RANGING:
         assert(msg == delayTimer);
-        sendUnicast();
+        sendRangeRequest();
         waiting_ack = 100e-3  ;
-        delayTimer   = new cMessage("delay-timer", TIMER_INIT_RANGING);
+        delayTimer   = new cMessage("Timer request range", TIMER_INIT_RANGING);
         scheduleAt(simTime()+waiting_ack, delayTimer);
         break;
 
 	case TIMER_INIT_RANGING:
 	    if(ack_pkt==false)
 	    {
-            EV << "Ack entregado no hace falta reenviar" << endl;
+            EV << "Ack entregado al NODO! no hace falta reenviar" << endl;
             ack_pkt=false;
 	    }else if (ack_pkt==true)
 	    {
             EV << "Necesitamos retransmitir el Range request" << endl;
-	        sendUnicast();
+	        sendRangeRequest();
 	    }
 
 
-//		remainingBurst--;
-//		if(remainingBurst == 0) {
-//			remainingBurst = burstSize;
-//			scheduleAt(simTime() + (dblrand()*1.4+0.3)*packetTime * burstSize / pppt, msg);
-//		} else {
-//			scheduleAt(simTime() + packetTime * 2, msg);
-//		}
 		break;
+	case TIMER_REQUEST_TIME_SYNC:
+	    if(ack_pkt==false)
+	            {
+	                EV << "TIME SYNC entregado al NODO! no hace falta reenviar" << endl;
+	                ack_pkt=false;
+	            }else if (ack_pkt==true)
+	            {
+	                EV << "Necesitamos retransmitir el TIME SYNC" << endl;
+	                long destAddr = msg->par("destAddr").longValue();
+	                sendTimeSync(destAddr-1);
+	            }
+	    break;
 
 	default:
 		EV << "Unkown selfmessage! -> delete, kind: "<<msg->getKind() <<endl;
@@ -119,22 +121,24 @@ void NetworkStackTrafficGenAnchor::handleLowerMsg(cMessage *msg)
         case RANGE_ACCEPT:
             if(pkt->getRanging_demand()){
                 EV << "Perfect, aceptamos el ranging! :D" << endl;
-
                 ack_pkt=false;
                 //Confirmamos al ancla que hacemos ranging.
-                sendAckNode(pkt->getSrcAddr());
-            }
-            else
-            {
+                sendTimeSync(pkt->getSrcAddr());
+                delayTimer   = new cMessage("TIMER TIME SYNC", TIMER_REQUEST_TIME_SYNC);
+                scheduleAt(simTime()+waiting_ack, delayTimer);
+                delayTimer->addPar("destAddr");
+                delayTimer->par("destAddr").setLongValue(pkt->getSrcAddr());
+            }else            {
                 EV << "Lo sentimos, el nodo no acepta el ranging! :(" << endl;
-
             }
-
             delete msg;
             msg = 0;
         break;
 
+        case PMU_START:
+            EV << "RANGING MEASUREMENT" << endl;
 
+        break;
         }
 }
 
@@ -149,7 +153,7 @@ void NetworkStackTrafficGenAnchor::handleLowerControl(cMessage *msg)
 	msg = 0;
 }
 
-void NetworkStackTrafficGenAnchor::sendUnicast()
+void NetworkStackTrafficGenAnchor::sendRangeRequest()
 {
     Request_ranging *pkt = new Request_ranging("RANGE REQUEST");
     pkt->setBitLength(packetLength);
@@ -164,15 +168,15 @@ void NetworkStackTrafficGenAnchor::sendUnicast()
     sendDown(pkt);
 }
 
-void NetworkStackTrafficGenAnchor::sendAckNode(int addr)
+void NetworkStackTrafficGenAnchor::sendTimeSync(int addr)
 {
     EV<< "Dirección del nodo a contestar ->" << addr << endl;
-    Request_ranging *pkt = new Request_ranging("RANGE ACCEPT NODE ACK");
+    Request_ranging *pkt = new Request_ranging("TIME SYNC");
        pkt->setBitLength(AckLength);
        pkt->setSrcAddr(myNetwAddr);
        pkt->setDestAddr(addr-1);
        pkt->setRanging_demand(true);
-       short kind=3;
+       short kind=4;
        pkt->setKind(kind);
        NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
        sendDown(pkt);

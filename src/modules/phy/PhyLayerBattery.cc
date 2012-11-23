@@ -44,6 +44,8 @@ void PhyLayerBattery::initialize(int stage) {
 	} else {
 		registerWithBattery("physical layer", numActivities);
 		setRadioCurrent(radio->getCurrentState());
+		radio->getCurrentChannel();
+
 	}
 }
 

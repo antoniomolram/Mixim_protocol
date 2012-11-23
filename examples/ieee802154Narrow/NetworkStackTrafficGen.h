@@ -43,12 +43,12 @@ private:
 
 public:
 	enum TrafficGenMessageKinds{
-		SEND_BROADCAST_TIMER = 1, RANGE_REQUEST=2,RANGE_ACCEPT=3,RANGE_ACCEPT_ACK=4
+		SEND_BROADCAST_TIMER = 1,TIME_RANGE_REQUEST, RANGE_REQUEST=2,RANGE_ACCEPT=3,REQUEST_TIME_SYNC=4,PMU_START
 
 	};
+	bool ack_pkt;
 
 protected:
-
 	int packetLength;
 	int ackLength;
 	simtime_t packetTime;
@@ -66,7 +66,7 @@ protected:
 	cMessage *delayTimerACK;
     cMessage *delayTimer;
 
-	int waiting_ack;
+    simtime_t waiting_ack;
 
 
 	BaseWorldUtility* world;
@@ -122,6 +122,8 @@ protected:
 
 	/** @brief Send a Range Accept message to lower layer */
 	virtual void sendRangeAccept(int anchor_dir);
+
+	virtual void sendPMUStart(int anchor_dir);
 };
 
 #endif

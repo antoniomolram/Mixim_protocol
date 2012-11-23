@@ -41,7 +41,8 @@ private:
 
 public:
 	enum TrafficGenMessageKinds{
-        INIT_RANGING = 1,TIMER_INIT_RANGING, RANGE_REQUEST=2,RANGE_ACCEPT=3
+        INIT_RANGING = 1,TIMER_INIT_RANGING, RANGE_REQUEST=2,RANGE_ACCEPT=3, TIMER_RANGE_ACCEPT, REQUEST_TIME_SYNC=4,
+        TIMER_REQUEST_TIME_SYNC, PMU_START=5
 	};
 	bool ack_pkt;
     int AckLength;
@@ -115,9 +116,9 @@ protected:
 	}
 
 
-	virtual void sendUnicast();
+	virtual void sendRangeRequest();
 
-	virtual void sendAckNode(int addr);
+	virtual void sendTimeSync(int addr);
 };
 
 #endif

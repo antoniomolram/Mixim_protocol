@@ -36,7 +36,6 @@ void NetworkStackTrafficGen::initialize(int stage)
 
 		arp          = FindModule<BaseArp*>::findSubModule(findHost());
 		myNetwAddr   = arp->myNetwAddr(this);
-
 		packetLength = par("packetLength");
 		ackLength    = 256;
 		packetTime   = par("packetTime");
@@ -79,7 +78,18 @@ void NetworkStackTrafficGen::handleSelfMsg(cMessage *msg)
 			scheduleAt(simTime() + packetTime * 2, msg);
 		}
 		break;
-
+	case TIME_RANGE_REQUEST:
+	    if(ack_pkt==false)
+	           {
+	               EV << "Ack entregado al ANCHOR! no hace falta reenviar" << endl;
+	               ack_pkt=false;
+	           }else if (ack_pkt==true)
+	           {
+	               EV << "Necesitamos retransmitir el Range request" << endl;
+	               long destAddr = msg->par("destAddr").longValue();
+	               sendRangeAccept(destAddr-1);
+	           }
+	    break;
 	default:
 		EV << "Unkown selfmessage! -> delete, kind: "<<msg->getKind() <<endl;
 		delete msg;
@@ -92,24 +102,34 @@ void NetworkStackTrafficGen::handleLowerMsg(cMessage *msg)
 {
     Request_ranging *pkt = (Request_ranging *)msg;
     short kind = pkt->getKind();
+    int anchor_addr = pkt->getSrcAddr()-1;
     switch( kind )
         {
     case RANGE_REQUEST: // Anchor pregunta si queremos hacer Ranging.
         EV << "Solicitud de ranging" << endl;
         if(pkt->getRanging_demand())
         {
-            //Comprobar más datos de paquete
-            //Enviar Range Accept
-            EV << "Dirección del Anchor:" <<  pkt->getSrcAddr() <<  endl;
-            int anchor_addr = pkt->getSrcAddr();
-
-            // Added -1 because anchor_addr is +1 and I don't know why! xD
-            sendRangeAccept(anchor_addr-1);
-
+                waiting_ack = 100e-3;
+                delayTimerACK   = new cMessage("Timer RANGE_REQUEST", TIME_RANGE_REQUEST);
+                EV<<"Lanzamos el temporizador del RANGE_REQUEST" <<endl;
+                scheduleAt(simTime()+ waiting_ack, delayTimerACK);
+                delayTimerACK->addPar("destAddr");
+                delayTimerACK->par("destAddr").setLongValue(pkt->getSrcAddr());
+                ack_pkt=true;
+                EV << "Dirección del Anchor:" <<  anchor_addr <<  endl;
+                sendRangeAccept(anchor_addr);          // Added -1 because anchor_addr is +1 and I don't know why! xD
         }
         break;
-    case 3:
-        EV << "Ack del anchor recibido"<< endl;
+    case RANGE_ACCEPT:
+        EV << "Mensaje RANGE_ACCEPT recibido"<< endl;
+        //Enviar enviamos TIME_SYNC
+
+        break;
+    case REQUEST_TIME_SYNC:
+        EV << "Mensaje TIME SYNC recibido"<< endl;
+        ack_pkt=false;
+        sendPMUStart( anchor_addr);
+
         break;
     default:
         EV << "Unkown received message! -> delete, kind: "<<msg->getKind() <<endl;
@@ -133,24 +153,9 @@ void NetworkStackTrafficGen::handleLowerControl(cMessage *msg)
 	msg = 0;
 }
 
-//void NetworkStackTrafficGen::sendBroadcast()
-//{
-//	NetwPkt *pkt = new NetwPkt("BROADCAST_MESSAGE", BROADCAST_MESSAGE);
-//	pkt->setBitLength(packetLength);
-//
-//	pkt->setSrcAddr(myNetwAddr);
-//	pkt->setDestAddr(destination);
-//	NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
-//
-//	Packet p(packetLength, 0, 1);
-//	emit(BaseMacLayer::catPacketSignal, &p);
-//
-//	sendDown(pkt);
-//}
 void NetworkStackTrafficGen::sendRangeAccept(int anchor_dir)
 {
-       Request_ranging *pkt = new Request_ranging("RANGE ACCEPT ANCHOR ACK",RANGE_ACCEPT );
-
+       Request_ranging *pkt = new Request_ranging("RANGE ACCEPT",RANGE_ACCEPT );
        pkt->setBitLength(ackLength);
        pkt->setSrcAddr(myNetwAddr);
        pkt->setDestAddr(anchor_dir);
@@ -158,4 +163,17 @@ void NetworkStackTrafficGen::sendRangeAccept(int anchor_dir)
        NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
        EV << "Enviando confirmación de Range Accepted al anchor ->"<< anchor_dir <<endl;
        sendDown(pkt);
+}
+
+void NetworkStackTrafficGen::sendPMUStart(int anchor_dir)
+{
+Request_ranging *pkt = new Request_ranging("PMU Start",PMU_START );
+      pkt->setBitLength(ackLength);
+      pkt->setSrcAddr(myNetwAddr);
+      pkt->setDestAddr(anchor_dir);
+      pkt->setRanging_demand(true);
+      NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
+      EV << "Enviando PMUStart al anchor ->"<< anchor_dir <<endl;
+      pkt->setKind(5);
+      sendDown(pkt);
 }
