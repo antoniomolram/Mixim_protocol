@@ -20,18 +20,21 @@
 
 #include "NetwPkt_m.h"
 #include "SimpleAddress.h"
-#include "BaseLayer.h"
+#include "AppLayer.h"
 #include "BaseArp.h"
 #include "BaseWorldUtility.h"
 #include "request_ranging_m.h"
 #include "NetwToMacControlInfo.h"
+
+#include "ChannelPkt_m.h"
+
 
 /**
  * @brief A module to generate traffic for the NIC, used for testing purposes.
  *
  * @ingroup exampleIEEE802154Narrow
  */
-class NetworkStackTrafficGen : public BaseLayer
+class NetworkStackTrafficGen : public AppLayer
 {
 private:
 	/** @brief Copy constructor is not allowed.
@@ -43,10 +46,13 @@ private:
 
 public:
 	enum TrafficGenMessageKinds{
-		SEND_BROADCAST_TIMER = 1,TIME_RANGE_REQUEST, RANGE_REQUEST=2,RANGE_ACCEPT=3,REQUEST_TIME_SYNC=4,PMU_START
+		SEND_BROADCAST_TIMER = 1,TIME_RANGE_REQUEST, RANGE_REQUEST=2,RANGE_ACCEPT=3,REQUEST_TIME_SYNC=4,PMU_START,
+		RangingPkt=10
 
 	};
 	bool ack_pkt;
+    int AckLength;
+    int anchor_addr;
 
 protected:
 	int packetLength;
@@ -73,7 +79,7 @@ protected:
 
 public:
 	NetworkStackTrafficGen()
-		: BaseLayer()
+		: AppLayer()
 		, packetLength(0)
 		, packetTime()
 		, pppt(0)
@@ -124,6 +130,12 @@ protected:
 	virtual void sendRangeAccept(int anchor_dir);
 
 	virtual void sendPMUStart(int anchor_dir);
+
+    virtual void setChannel(int channel);
+
+    virtual void getChannel();
+
+    virtual void ReplyRangingPkt(int anchor_dir);
 };
 
 #endif

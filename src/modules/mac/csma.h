@@ -121,6 +121,8 @@ class MIXIM_API csma : public BaseMacLayer
     /** @brief Handle control messages from lower layer */
     virtual void handleLowerControl(cMessage *msg);
 
+    MacPkt *macPkt;
+
   protected:
     typedef std::list<MacPkt*> MacQueue;
 

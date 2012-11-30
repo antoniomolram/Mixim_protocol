@@ -36,7 +36,7 @@
 #include "FindModule.h"
 #include "MacPkt_m.h"
 #include "request_ranging_m.h"
-
+#include "ChannelPkt_m.h"
 Define_Module(csma);
 
 /**
@@ -180,8 +180,8 @@ csma::~csma() {
  */
 void csma::handleUpperMsg(cMessage *msg) {
 	//MacPkt *macPkt = encapsMsg(msg);
-	MacPkt *macPkt = new MacPkt(msg->getName());
-	Request_ranging *paquete = (Request_ranging *)msg;
+//	MacPkt *macPkt = new MacPkt(msg->getName());
+	//Request_ranging *paquete = (Request_ranging *)msg;
 /*
  * Funcionamiento del pasar paquetes y leerlos! :D
  * Añadido paquete Request_ranging
@@ -192,6 +192,9 @@ void csma::handleUpperMsg(cMessage *msg) {
 
 
 
+//	  Request_ranging *paquete = (Request_ranging *)msg;
+//    macPkt = new MacPkt(msg->getName());
+   // macPkt->setDestAddr(paquete->getDestAddr());
 
 
 
@@ -199,7 +202,6 @@ void csma::handleUpperMsg(cMessage *msg) {
 	cObject *const cInfo = msg->removeControlInfo();
 	debugEV<<"CSMA received a message from upper layer, name is " << msg->getName() <<", CInfo removed, mac addr="<< getUpperDestinationFromControlInfo(cInfo) << endl;
 	LAddress::L2Type dest = getUpperDestinationFromControlInfo(cInfo);
-	macPkt->setDestAddr(paquete->getDestAddr());
 	delete cInfo;
 	macPkt->setSrcAddr(myMacAddr);
 
@@ -768,6 +770,7 @@ void csma::handleLowerMsg(cMessage *msg) {
 	<< ", myState=" << macState << " src=" << macPkt->getSrcAddr()
 	<< " dst=" << macPkt->getDestAddr() << " myAddr="
 	<< myMacAddr << endl;
+
 
 	if(macPkt->getDestAddr() == myMacAddr)
 	{

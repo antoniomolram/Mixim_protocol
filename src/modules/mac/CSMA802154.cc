@@ -16,13 +16,17 @@
 #include "CSMA802154.h"
 
 #include <cassert>
+#include <stdio.h>
+#include <string.h>
 
 #include "DeciderResult802154Narrow.h"
 #include "Decider802154Narrow.h"
 #include "PhyToMacControlInfo.h"
 #include "MacToNetwControlInfo.h"
 #include "MacPkt_m.h"
-
+#include "BasePhyLayer.h"
+#include "ChannelPkt_m.h"
+#include "request_ranging_m.h"
 Define_Module(CSMA802154);
 
 
@@ -58,4 +62,74 @@ void CSMA802154::handleLowerControl(cMessage *msg) {
 		return;
 	}
 	csma::handleLowerControl(msg);
+}
+
+void CSMA802154::handleUpperMsg(cMessage *msg){
+//    ChannelPkt *channelChange = (ChannelPkt *)msg;
+
+
+    std::string RequestRanging = "Request_ranging";
+    std::string ChannelChange = "ChannelPkt";
+    std::string KindPkt = msg->getClassName();
+    if(KindPkt == RequestRanging){
+
+        EV << "// Estamos enviando un request ranging //" << endl;
+        Request_ranging *paquete = (Request_ranging *)msg;
+        macPkt = new MacPkt(msg->getName());
+        csma::macPkt->setDestAddr(paquete->getDestAddr());
+        csma::handleUpperMsg(msg);
+
+
+    }else if(KindPkt==ChannelChange){
+
+
+
+        EV << "// Estamos cambiando de canal //" << endl;
+        ChannelPkt *changeChannel = (ChannelPkt *)msg;
+        int canal=    changeChannel->getChannel();
+
+        switch(changeChannel->getSetChannel()){
+            case true:
+                EV << "Canal usado:" << csma::phy->getCurrentRadioChannel() << endl;
+                EV << "Canal que queremos:" << changeChannel->getChannel() << endl;
+
+                changeChannel->getChannel();
+
+                csma::phy->setCurrentRadioChannel(canal);
+                EV << "Canal usado:" << csma::phy->getCurrentRadioChannel() << endl;
+
+
+                changeChannel->setKind(101);  //Set channel
+                csma::sendUp(changeChannel);
+
+
+            break;
+            case false:
+                EV << "Canal usado -> " << csma::phy->getCurrentRadioChannel() << endl;
+                changeChannel->setKind(102);  //Get channel
+                changeChannel->setChannel(csma::phy->getCurrentRadioChannel());
+
+                csma::sendUp(changeChannel);
+
+            break;
+
+        }
+
+
+
+
+
+
+        //csma::phy->setCurrentRadioChannel(2);
+
+
+    }
+
+
+
+
+
+
+
+
 }

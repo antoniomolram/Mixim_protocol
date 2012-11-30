@@ -19,6 +19,9 @@
 #include "MacToPhyControlInfo.h"
 #include "MacPkt_m.h"
 
+//Added
+
+
 Define_Module(PhyLayerBattery);
 
 void PhyLayerBattery::initialize(int stage) {
@@ -111,6 +114,8 @@ void PhyLayerBattery::handleUpperMessage(cMessage* msg) {
 	if(current > 0) {
 		BatteryAccess::drawCurrent(current, TX_ACCT);
 	}
+
+    //EV << "Channel desde PhyLayerBattery :" << canal << endl;
 
 	PhyLayer::handleUpperMessage(msg);
 }

@@ -20,7 +20,7 @@
 
 #include "NetwPkt_m.h"
 #include "SimpleAddress.h"
-#include "BaseLayer.h"
+#include "AppLayer.h"
 #include "BaseArp.h"
 #include "BaseWorldUtility.h"
 #include "NetwToMacControlInfo.h"
@@ -29,7 +29,7 @@
  *
  * @ingroup exampleIEEE802154Narrow
  */
-class NetworkStackTrafficGenAnchor : public BaseLayer
+class NetworkStackTrafficGenAnchor : public AppLayer
 {
 private:
 	/** @brief Copy constructor is not allowed.
@@ -42,13 +42,14 @@ private:
 public:
 	enum TrafficGenMessageKinds{
         INIT_RANGING = 1,TIMER_INIT_RANGING, RANGE_REQUEST=2,RANGE_ACCEPT=3, TIMER_RANGE_ACCEPT, REQUEST_TIME_SYNC=4,
-        TIMER_REQUEST_TIME_SYNC, PMU_START=5
+        TIMER_REQUEST_TIME_SYNC, PMU_START=5, SET_CHANNEL=101, GET_CHANNEL=102, RANGING=500
 	};
 	bool ack_pkt;
     int AckLength;
 
 	simtime_t waiting_ack;
 
+    int nodeAddr;
 protected:
 
 	int packetLength;
@@ -61,7 +62,6 @@ protected:
 	long nbPacketDropped;
 	int destino;
 
-
 	BaseArp* arp;
 	LAddress::L3Type myNetwAddr;
 
@@ -71,7 +71,7 @@ protected:
 
 public:
 	NetworkStackTrafficGenAnchor()
-		: BaseLayer()
+		: AppLayer()
 		, packetLength(0)
 		, packetTime()
 		, pppt(0)
@@ -119,6 +119,14 @@ protected:
 	virtual void sendRangeRequest();
 
 	virtual void sendTimeSync(int addr);
+
+	virtual void startRanging(int state,int channel);
+
+	virtual void setChannel(int channel);
+
+	virtual void getChannel();
+
+	virtual void sendRangingPkt(int anchor);
 };
 
 #endif

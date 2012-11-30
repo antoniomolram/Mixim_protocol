@@ -19,18 +19,23 @@
 
 #include "Packet.h"
 #include "request_ranging_m.h"
+#include "ChannelPkt_m.h"
+
 #include "BaseMacLayer.h"
 #include "FindModule.h"
 #include "NetwToMacControlInfo.h"
+
 
 Define_Module(NetworkStackTrafficGenAnchor);
 
 void NetworkStackTrafficGenAnchor::initialize(int stage)
 {
-	BaseLayer::initialize(stage);
+	AppLayer::initialize(stage);
 
 	if(stage == 0) {
 	    ack_pkt = true;
+
+	    nodeAddr=-1;
         AckLength    = 256;
 
 		world        = FindModule<BaseWorldUtility*>::findGlobalModule();
@@ -102,6 +107,7 @@ void NetworkStackTrafficGenAnchor::handleSelfMsg(cMessage *msg)
 	            }
 	    break;
 
+
 	default:
 		EV << "Unkown selfmessage! -> delete, kind: "<<msg->getKind() <<endl;
 		delete msg;
@@ -113,8 +119,11 @@ void NetworkStackTrafficGenAnchor::handleSelfMsg(cMessage *msg)
 void NetworkStackTrafficGenAnchor::handleLowerMsg(cMessage *msg)
 {
     Request_ranging *pkt = (Request_ranging *)msg;
+
+    ChannelPkt *changeChannel = (ChannelPkt *)msg;
 	Packet p(packetLength, 1, 0);
 	emit(BaseMacLayer::catPacketSignal, &p);
+
 	msg->getKind();
     switch( msg->getKind() )
         {
@@ -123,6 +132,7 @@ void NetworkStackTrafficGenAnchor::handleLowerMsg(cMessage *msg)
                 EV << "Perfect, aceptamos el ranging! :D" << endl;
                 ack_pkt=false;
                 //Confirmamos al ancla que hacemos ranging.
+                nodeAddr=pkt->getSrcAddr();
                 sendTimeSync(pkt->getSrcAddr());
                 delayTimer   = new cMessage("TIMER TIME SYNC", TIMER_REQUEST_TIME_SYNC);
                 scheduleAt(simTime()+waiting_ack, delayTimer);
@@ -137,6 +147,27 @@ void NetworkStackTrafficGenAnchor::handleLowerMsg(cMessage *msg)
 
         case PMU_START:
             EV << "RANGING MEASUREMENT" << endl;
+            startRanging(0,0);
+            break;
+
+        case SET_CHANNEL:
+            EV << "Contestación SetChannel" << endl;
+
+            //changeChannel->getChannel();
+            EV << "Canal actualizado" <<  changeChannel->getChannel() << endl;
+
+
+        break;
+        case GET_CHANNEL:
+            EV << "Contestación GetChannel" << endl;
+            //changeChannel->getChannel();
+            sendRangingPkt(nodeAddr);
+            //startRanging(1, changeChannel->getChannel());
+        break;
+        case RANGING:
+
+
+
 
         break;
         }
@@ -182,3 +213,81 @@ void NetworkStackTrafficGenAnchor::sendTimeSync(int addr)
        sendDown(pkt);
 }
 
+void NetworkStackTrafficGenAnchor::startRanging(int state, int channel){
+
+
+
+    //Funcion cambiar channel
+    //NetworkStackTrafficGenAnchor::setChannel(5);
+
+    //Funcion getchannel
+
+    /*
+     * States
+     *
+     * 1º INIT => state=0
+     * 2º CHANNEL_JUMP  state=1
+     * 3º END =>  state=3
+     *
+     *
+     */
+
+    switch(state)
+    {
+    case 0: // Init
+        NetworkStackTrafficGenAnchor::getChannel();
+
+    break;
+    case 1:
+            if (channel<=79){
+                setChannel(channel+1);
+            }
+        break;
+    }
+
+    /*
+     * Algoritmo
+     * iniciamos
+     *  1º pedimos el canal ==> Function getchannel
+     *  si el canal es el 0 iniciamos contadores
+     *  si no canal=canal+1 ==> Function setchannel
+     * hasta que canal=80
+     *
+     *
+     */
+
+
+}
+
+void NetworkStackTrafficGenAnchor::getChannel()
+{
+    ChannelPkt *ChangeChannel = new ChannelPkt("Get channel",0);
+    ChangeChannel->setBitLength(AckLength);
+    NetwToMacControlInfo::setControlInfo(ChangeChannel, LAddress::L2BROADCAST);
+    ChangeChannel->setSetChannel(false);
+    sendDown(ChangeChannel);
+
+}
+
+
+void NetworkStackTrafficGenAnchor::setChannel(int channel) {
+    ChannelPkt *ChangeChannel = new ChannelPkt("Set channel",0);
+    ChangeChannel->setBitLength(AckLength);
+    NetwToMacControlInfo::setControlInfo(ChangeChannel, LAddress::L2BROADCAST);
+    ChangeChannel->setChannel(channel);
+    ChangeChannel->setSetChannel(true);
+    sendDown(ChangeChannel);
+}
+
+void NetworkStackTrafficGenAnchor::sendRangingPkt(int anchor)
+{
+      Request_ranging *pkt = new Request_ranging("RangingPkt");
+         pkt->setBitLength(10);
+         pkt->setSrcAddr(myNetwAddr);
+         pkt->setDestAddr(anchor-1);
+
+         short kind=10;
+         pkt->setKind(kind);
+         NetwToMacControlInfo::setControlInfo(pkt, LAddress::L2BROADCAST);
+         sendDown(pkt);
+}

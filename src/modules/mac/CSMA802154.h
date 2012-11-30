@@ -21,6 +21,9 @@
 #include "MiXiMDefs.h"
 #include "csma.h"
 
+#include "BasePhyLayer.h"
+
+
 /**
  * @brief Extends "csma" module by some statistics send
  * up to the upper layer.
@@ -40,6 +43,14 @@ protected:
 
     /** @brief Handle control messages from lower layer */
     virtual void handleLowerControl(cMessage *msg);
+
+    virtual void handleUpperMsg(cMessage *msg);
+
+    MacToPhyInterface* phy;
+
+
+
+
 };
 
 #endif
